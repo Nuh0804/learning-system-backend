@@ -46,19 +46,19 @@ class AnswerSerializer(serializers.ModelSerializer):
     user = serializers.CurrentUserDefault()
     class Meta:
         model = Answer
-        fields = ['answer', 'user', 'question_id']
+        fields = ['answer', 'user', 'question', 'course']
 
     def create(self, validated_data):
         answer = validated_data['answer']
-        question_id = self.context['question_id']
+        question_id = validated_data['question']
 
-        choice = Choice.objects.get(value = answer, question_id= question_id)
+        choice = Choice.objects.get(value = answer, question_id= question_id.id)
         
         if choice.is_correct==False:
             marks = 0
         else:
             marks = 1
-        return Answer.objects.create(question_id= question_id, marks = marks, **validated_data)
+        return Answer.objects.create(question_id= question_id.id, marks = marks, **validated_data)
     
 
 
@@ -70,28 +70,37 @@ class TestSerializer(serializers.ModelSerializer):
 
 
 class ResultmakeSerializer(serializers.ModelSerializer):
-    total = serializers.SerializerMethodField()
+    total = serializers.IntegerField(read_only = True)
+    # user = serializers.HiddenField(default = serializers.CurrentUserDefault())
+
+    # def get_total(self, result:Result):
+    #     course = self.context['course_id']
+    #     # request = self.context['request']
+    #     # user = result.course
+    #     # print(user)
+    #     # correct_answers_count = Answer.objects.filter(user = user, course = course, marks=1).count()
+    #     return result.course.course_id*3
+    
 
     class Meta:
         model = Result
-        fields = ['total', 'user', 'course']
+        fields = ['user', 'course', 'total']
     
-    
-    def get_total(self, obj):
-        # user = self.validated_data['user_id']
-        course_id = self.context['course_id']
-        correct_answers_count = Answer.objects.filter(marks=1).count()
-        return correct_answers_count
+    # def to_representation(self, instance):
+    #     ret = super().to_representation(instance)
+    #     ret['total'] = Answer.objects.filter(course=instance.course).count()
+    #     return ret
     
     def create(self, validated_data):
-        total = self.get_total(validated_data)
-        validated_data['total'] = total
-        return super().create(validated_data)
+        user = self.validated_data['user']
+        course = self.context['course_id']
+        total = Answer.objects.filter(user = user, course = course, marks=1).count()
+        return Result.objects.create(total = total, **validated_data)
 
-    def update(self, instance, validated_data):
-        total = self.get_total(validated_data)
-        validated_data['total'] = total
-        return super().update(instance, validated_data)
+    # def update(self, instance, validated_data):
+    #     total = self.get_total(validated_data)
+    #     validated_data['total'] = total
+    #     return super().update(instance, validated_data)
     
     #create signal for this feature hence only get method will be used.
     # for asnwering endpoint user has to send only once

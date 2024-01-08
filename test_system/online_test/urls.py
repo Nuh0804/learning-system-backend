@@ -16,11 +16,9 @@ question_make_router.register('choices', MultipleChoiceMakeViewset, basename='ch
 
 #for student
 router.register('questions', QuestionViewset, basename='questions')
-
-#nested routers
-answering_router = routers.NestedDefaultRouter(router, 'questions', lookup = 'questions')
-answering_router.register('answers', AnsweringViewset, basename='answers')
+router.register('answers', AnsweringViewset, basename='answers')
 
 
 
-urlpatterns = router.urls + question_make_router.urls + answering_router.urls + result_router.urls
+
+urlpatterns = router.urls + question_make_router.urls  + result_router.urls
