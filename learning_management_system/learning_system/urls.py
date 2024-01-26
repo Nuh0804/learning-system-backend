@@ -8,4 +8,7 @@ router.register('Course', CourseViewset, basename='course')
 contentrouter = NestedDefaultRouter(router, 'Course', lookup= 'course')
 contentrouter.register('content', CourseContentViewSet, basename='content')
 
-urlpatterns = router.urls + contentrouter.urls
+enrolling_router = NestedDefaultRouter(router, 'Course', lookup = 'course')
+enrolling_router.register('enroll', StudentEnrollingViewset, basename='student')
+# router.register('Student', StudentProfileViewset, basename='student')
+urlpatterns = router.urls + contentrouter.urls + enrolling_router.urls

@@ -22,22 +22,7 @@ class RegisterUserPost(APIView):
             message = {'save': True}
             return Response(message)
          return Response(status, status= status.HTTP_400_BAD_REQUEST)
-    # def post(self, request):
-    #     data = request.data
-    #     print(request.data)
-    #     serializer = RegisterUserSerializer(data=data)
-    #     if serializer.is_valid():
-    #         email = data['email']
-    #         user = User.objects.filter(email=email)
-    #         if user:
-    #             message = {'status': False, 'message': 'Username already exists'}
-    #             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-    #         serializer.save()
 
-    #         message = {'save': True}
-    #         return Response(message)
 
-    #     message = {'save': False, 'errors': serializer.errors}
-    #     return Response(message)
 
     
