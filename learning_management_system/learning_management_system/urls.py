@@ -22,7 +22,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path ('test/', include('online_test.urls')),
-    path('', include('learning_system.urls')) ,
+    path('lms/', include('learning_system.urls')) ,
     path('auth/',include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt'))
 ] 

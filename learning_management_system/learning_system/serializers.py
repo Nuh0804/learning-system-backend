@@ -6,9 +6,8 @@ from myusers.serializers import *
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['id', 'name', 'description', 'students_enroled']
-
-        
+        fields = ['id', 'name', 'description','teacher', 'students_enroled']
+   
 
 class CourseContentSerializer(serializers.ModelSerializer):
     file = serializers.FileField(use_url = True)
@@ -40,7 +39,6 @@ class EnrolledCourseForStudentSerializer(serializers.ModelSerializer):
         
         return StudentCourse.objects.create(course_id = course_id.id, **validated_data)
     
-
 
 class TeachersCourseSerializer(serializers.ModelSerializer):
     class Meta:

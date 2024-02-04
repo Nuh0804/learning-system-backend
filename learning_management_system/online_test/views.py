@@ -60,8 +60,6 @@ class ResultViewset(viewsets.ModelViewSet):
     
     serializer_class = ResultmakeSerializer        
 
-
-
-
     def get_serializer_context(self):
         return {'course_id': self.kwargs['course_pk']}
+    
